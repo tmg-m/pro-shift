@@ -15,7 +15,7 @@ function Home() {
     <>
       <h1>Pro Shift</h1>
       <Calendar onChange={onChange} value={value} />
-      <TimeShift date={value}/>
+      <TimeShift data={value}/>
     </>
   )
 
