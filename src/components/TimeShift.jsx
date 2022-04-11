@@ -49,23 +49,14 @@ function TimeShift({ data }) {
     totalHours: 0,
   });
 
-  const [defaultBtn, sets] = useState(true);
-  const [selectBtn, setSelectBtn] = useState(false);
+  const [defaultBtn, setDefaultBtn] = useState(true);
+  const [toggleHour, setToggleHour] = useState(true);
 
 
 
   const timeTable = []
   for (let i = 1; i <= 24; i++) {
     timeTable.push(i)
-  }
-
-  const handleDefaultHour = (e) => {
-    setDaily((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: 0,
-      };
-    })
   }
 
   const handleAddHour = (e) => {
@@ -75,6 +66,7 @@ function TimeShift({ data }) {
         [e.target.name]: 1,
       };
     })
+    setDefaultBtn(false)
   }
   const handleReduceHour = (e) => {
     setDaily((prev) => {
@@ -83,6 +75,18 @@ function TimeShift({ data }) {
         [e.target.name]: .5,
       };
     })
+    setToggleHour(false)
+  }
+
+  const handleDefaultHour = (e) => {
+    setDaily((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: 0,
+      };
+    })
+    setDefaultBtn(true)
+    setToggleHour(true)
   }
 
   console.log(daily);
@@ -104,9 +108,10 @@ function TimeShift({ data }) {
             return (
               <td>
                 <div key={i}>
-                  <button name={`hour${hours}`} onClick={handleAddHour}>1</button>
+                  {defaultBtn ? <button name={`hour${hours}`} onClick={handleAddHour}>1</button> : <>{toggleHour ? <button name={`hour${hours}`} onClick={handleReduceHour}>0.5</button> : <button name={`hour${hours}`} onClick={handleDefaultHour}>0</button>}</>}
+                  {/* <button name={`hour${hours}`} onClick={handleAddHour}>1</button>
                   <button name={`hour${hours}`} onClick={handleReduceHour}>0.5</button>
-                  <button name={`hour${hours}`} onClick={handleDefaultHour}>0</button>
+                  <button name={`hour${hours}`} onClick={handleDefaultHour}>0</button> */}
                 </div>
               </td>
             )
