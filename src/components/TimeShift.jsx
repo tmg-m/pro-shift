@@ -1,32 +1,38 @@
 import { useEffect, useState } from "react";
 import DayShift from "./DayShift";
-import hourData from "../hourData.json"
+import hourDataDb from "../hourData.json"
 
-function TimeShift({ data }) {
+function TimeShift({ date }) {
   const [required, setRequired] = useState({
     day: "",
-    todayDate: "",
+    date: "",
     month: "",
     year: "",
   });
 
+  const [daily, setDaily] = useState(hourDataDb);   /// main data of each day
+  const [dailyTotal, setDailyTotal] = useState(0);
+
   useEffect(() => {
-    let newDate = data.toString().split(" ");
+    let newDate = date.toString().split(" ");
     setRequired({
       day: newDate[0],
-      todayDate: newDate[2],
+      date: newDate[2],
       month: newDate[1],
       year: newDate[3],
     })
-  }, [data]);
+  }, [date]);
 
-  const [daily, setDaily] = useState(hourData);   /// main data
+  useEffect(() => {
+    let total = daily.map((day) => day.toDo).reduce((a, b) => a + b);
+    setDailyTotal(total)
+  }, [daily]);
 
   const hourShift = (handleCal) => {
     setDaily(prev => {
       return [
         ...prev.map((hour) => {
-          if( hour.clock === handleCal.clock){
+          if (hour.clock === handleCal.clock) {
             hour.toDo = handleCal.toDo
             return hour
           } else {
@@ -37,12 +43,15 @@ function TimeShift({ data }) {
     })
   };
 
-  console.log(daily);
+  const submitHour = () => {
+    console.log("saving")
+  }
 
   return (
     <>
       <h1>Schedule</h1>
-      <h1>{required ? <><p>{required.day} {required.todayDate} {required.month} {required.year}</p></> : null}</h1>
+      <h1>Daily total: {dailyTotal} </h1>
+      <h1>{required ? <><p>{required.day} {required.date} {required.month} {required.year}</p></> : null}</h1>
       <table>
         <tr>
           {daily.map((time, i) => {
@@ -56,8 +65,50 @@ function TimeShift({ data }) {
           })}
         </tr>
       </table>
+      <button onClick={submitHour}>Save</button>
     </>
   )
 }
 
 export default TimeShift;
+
+
+// const submitHour = () => {
+//   if (savedDay.length <= 0) {
+//     setSavedDay(prev => {
+//       return [
+//         ...prev,
+//         {
+//           day: required.day,
+//           date: required.date,
+//           month: required.month,
+//           year: required.year,
+//           hour: daily,
+//         }
+//       ]
+//     })
+//   } else if(savedDay.length > 0) {
+//     savedDay.map(dayData => {
+//       if (dayData.day === required.day && dayData.date === required.date && dayData.month === required.month && dayData.year === required.year) {
+//         console.loglog("ok")
+//       } else {
+//         console.log("ok")
+//         // setSavedDay(prev => {
+//         //   return [
+//         //     ...prev,
+//         //     {
+//         //       day: required.day,
+//         //       date: required.date,
+//         //       month: required.month,
+//         //       year: required.year,
+//         //       hour: daily,
+//         //     }
+//         //   ]
+//         // })
+//       }
+//     })
+//   } else {
+//     console.log("do something");
+//   }
+
+// }

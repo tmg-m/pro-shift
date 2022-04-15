@@ -1,10 +1,7 @@
 import { useState } from "react";
 
 function DayShift ({clock, toDo, hourShift}) {
-
-  const [defaultBtn, setDefaultBtn] = useState(true);
-  const [toggleHour, setToggleHour] = useState(true);
-
+  
   let workHour = 0;
   let handleStyle = {};
 
@@ -23,8 +20,6 @@ function DayShift ({clock, toDo, hourShift}) {
   const handleCal = () => {
     hourShift({ clock: clock, toDo: workHour})
   };
-
-  console.log(handleStyle);
 
   return(
     <>

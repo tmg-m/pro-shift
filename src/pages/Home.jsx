@@ -7,9 +7,14 @@ function Home() {
 
   const [value, setValue] = useState(new Date());
   const [visible, setVisible] = useState(false);
+  const [dayDb, setDayDb] = useState([]);
 
   function onChange(nextValue) {
     setValue(nextValue);
+  }
+
+  const saveDay = () => {
+    console.log("i m here in parent")
   }
 
   const handleVisible = () => {
@@ -20,7 +25,11 @@ function Home() {
     <>
       <h1>Pro Shift</h1>
       <Calendar onChange={onChange} value={value} />
-      {visible ?<> <button onClick={handleVisible}>Hide work schedule</button> <TimeShift data={value}/> </>  : <button onClick={handleVisible}>show work Schedule</button>}
+      {visible ?<>
+            <button onClick={handleVisible}>Hide work schedule</button> 
+            <TimeShift date={value} saveDay={saveDay}/> 
+         </>  
+      : <button onClick={handleVisible}>show work Schedule</button>}
     </>
   )
 
