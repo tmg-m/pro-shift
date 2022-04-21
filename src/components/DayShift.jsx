@@ -25,7 +25,7 @@ function DayShift ({clock, toDo, hourShift}) {
     <>
       <h1>{`${clock}:00`}</h1>
       <button style={handleStyle} onClick={handleCal}>{toDo}</button>
-    </>
+    </> 
   )
 }
 

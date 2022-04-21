@@ -1,37 +1,30 @@
 import { useEffect, useState } from "react";
 import DayShift from "./DayShift";
-import hourDataDb from "../hourData.json"
 
-function TimeShift({ date }) {
-  const [required, setRequired] = useState({
-    day: "",
-    date: "",
-    month: "",
-    year: "",
-  });
-
-  const [daily, setDaily] = useState(hourDataDb);   /// main data of each day
-  const [dailyTotal, setDailyTotal] = useState(0);
+function TimeShift({ currentDay, saveDay }) {
+  const [dayData, setdayData] = useState(null);    /// Today's date
+  const [dailyTotal, setDailyTotal] = useState(0); /// Total hours of the day 
 
   useEffect(() => {
-    let newDate = date.toString().split(" ");
-    setRequired({
-      day: newDate[0],
-      date: newDate[2],
-      month: newDate[1],
-      year: newDate[3],
+    setdayData({
+      day: currentDay.day,
+      date: currentDay.date,
+      month: currentDay.month,
+      year: currentDay.year,
+      hour: currentDay.hour
     })
-  }, [date]);
+  }, [currentDay]);
 
   useEffect(() => {
-    let total = daily.map((day) => day.toDo).reduce((a, b) => a + b);
+    let total = currentDay.hour.map((day) => day.toDo).reduce((a, b) => a + b);
     setDailyTotal(total)
-  }, [daily]);
+  }, [dayData]);
 
   const hourShift = (handleCal) => {
-    setDaily(prev => {
-      return [
-        ...prev.map((hour) => {
+    setdayData((prev) => {
+      return {
+        ...prev,
+        hour: prev.hour.map((hour) => {
           if (hour.clock === handleCal.clock) {
             hour.toDo = handleCal.toDo
             return hour
@@ -39,22 +32,22 @@ function TimeShift({ date }) {
             return hour
           }
         })
-      ]
+      }
     })
   };
 
   const submitHour = () => {
-    console.log("saving")
+    saveDay(dayData)
   }
 
   return (
     <>
       <h1>Schedule</h1>
       <h1>Daily total: {dailyTotal} </h1>
-      <h1>{required ? <><p>{required.day} {required.date} {required.month} {required.year}</p></> : null}</h1>
+      <h1>{dayData ? <><p>{dayData.day} {dayData.date} {dayData.month} {dayData.year}</p></> : null}</h1>
       <table>
         <tr>
-          {daily.map((time, i) => {
+          {currentDay.hour.map((time, i) => {
             return (
               <td key={i}>
                 <div>
@@ -71,44 +64,3 @@ function TimeShift({ date }) {
 }
 
 export default TimeShift;
-
-
-// const submitHour = () => {
-//   if (savedDay.length <= 0) {
-//     setSavedDay(prev => {
-//       return [
-//         ...prev,
-//         {
-//           day: required.day,
-//           date: required.date,
-//           month: required.month,
-//           year: required.year,
-//           hour: daily,
-//         }
-//       ]
-//     })
-//   } else if(savedDay.length > 0) {
-//     savedDay.map(dayData => {
-//       if (dayData.day === required.day && dayData.date === required.date && dayData.month === required.month && dayData.year === required.year) {
-//         console.loglog("ok")
-//       } else {
-//         console.log("ok")
-//         // setSavedDay(prev => {
-//         //   return [
-//         //     ...prev,
-//         //     {
-//         //       day: required.day,
-//         //       date: required.date,
-//         //       month: required.month,
-//         //       year: required.year,
-//         //       hour: daily,
-//         //     }
-//         //   ]
-//         // })
-//       }
-//     })
-//   } else {
-//     console.log("do something");
-//   }
-
-// }
